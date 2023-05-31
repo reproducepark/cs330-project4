@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.pj4test'
+    namespace 'com.example.project4'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.pj4test"
+        applicationId "com.example.project4"
         minSdk 23
         targetSdk 33
         versionCode 1

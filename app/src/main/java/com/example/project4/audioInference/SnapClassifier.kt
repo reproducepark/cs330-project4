@@ -1,4 +1,4 @@
-package com.example.pj4test.audioInference
+package com.example.project4.audioInference
 
 import android.content.Context
 import android.media.AudioRecord

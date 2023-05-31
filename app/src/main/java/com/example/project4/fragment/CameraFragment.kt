@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.pj4test.fragment
+package com.example.project4.fragment
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -35,12 +35,12 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.pj4test.ProjectConfiguration
+import com.example.project4.ProjectConfiguration
 import java.util.LinkedList
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import com.example.pj4test.cameraInference.PersonClassifier
-import com.example.pj4test.databinding.FragmentCameraBinding
+import com.example.project4.cameraInference.PersonClassifier
+import com.example.project4.databinding.FragmentCameraBinding
 import org.tensorflow.lite.task.vision.detector.Detection
 
 class CameraFragment : Fragment(), PersonClassifier.DetectorListener {

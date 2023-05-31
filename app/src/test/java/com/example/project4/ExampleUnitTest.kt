@@ -1,4 +1,4 @@
-package com.example.pj4test
+package com.example.project4
 
 import org.junit.Test
 

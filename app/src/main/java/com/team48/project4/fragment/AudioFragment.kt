@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.team48.project4.MainActivity
 import com.team48.project4.ProjectConfiguration
 import com.team48.project4.audioInference.SpeechClassifier
 import com.team48.project4.databinding.FragmentAudioBinding
@@ -81,4 +82,5 @@ class AudioFragment: Fragment(), SpeechClassifier.DetectorListener {
         }
         builder.show()
     }
+
 }

@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.team48.project4.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/cameraFragmentContainerView"
-        android:name="com.example.project4.fragment.CameraFragment"
+        android:name="com.team48.project4.fragment.CameraFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,7 +19,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/audioFragmentContainerView"
-        android:name="com.example.project4.fragment.AudioFragment"
+        android:name="com.team48.project4.fragment.AudioFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

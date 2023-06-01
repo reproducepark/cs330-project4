@@ -1,4 +1,4 @@
-package com.example.project4.fragment
+package com.team48.project4.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.example.project4.ProjectConfiguration
-import com.example.project4.audioInference.SnapClassifier
-import com.example.project4.databinding.FragmentAudioBinding
+import com.team48.project4.ProjectConfiguration
+import com.team48.project4.audioInference.SnapClassifier
+import com.team48.project4.databinding.FragmentAudioBinding
 
 class AudioFragment: Fragment(), SnapClassifier.DetectorListener {
     private val TAG = "AudioFragment"

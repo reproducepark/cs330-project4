@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.project4.cameraInference
+package com.team48.project4.cameraInference
 
 import android.content.Context
 import android.graphics.Bitmap

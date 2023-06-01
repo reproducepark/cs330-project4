@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.project4'
+    namespace 'com.team48.project4'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.project4"
+        applicationId "com.team48.project4"
         minSdk 23
         targetSdk 33
         versionCode 1

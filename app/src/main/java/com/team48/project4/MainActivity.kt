@@ -1,15 +1,20 @@
-package com.example.project4
+package com.team48.project4
 
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.RECORD_AUDIO
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.util.*
+import androidx.appcompat.app.AlertDialog
+import com.team48.project4.R
+
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"

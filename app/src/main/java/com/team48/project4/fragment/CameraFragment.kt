@@ -13,37 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.project4.fragment
+package com.team48.project4.fragment
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.camera.core.AspectRatio
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
+import androidx.appcompat.app.AlertDialog
+import androidx.camera.core.*
 import androidx.camera.core.ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.project4.ProjectConfiguration
-import java.util.LinkedList
+import com.team48.project4.MainActivity
+import com.team48.project4.ProjectConfiguration
+import com.team48.project4.cameraInference.PersonClassifier
+import com.team48.project4.databinding.FragmentCameraBinding
+import org.tensorflow.lite.task.vision.detector.Detection
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import com.example.project4.cameraInference.PersonClassifier
-import com.example.project4.databinding.FragmentCameraBinding
-import org.tensorflow.lite.task.vision.detector.Detection
+
 
 class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
+    var Sync: Boolean = false
     private val TAG = "CameraFragment"
 
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
@@ -58,7 +58,7 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
     private var camera: Camera? = null
-
+    public var lastAnalysisResultTime: Long = 0
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
 
@@ -142,6 +142,8 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
                 .setOutputImageFormat(OUTPUT_IMAGE_FORMAT_RGBA_8888)
                 .build()
         // The analyzer can then be assigned to the instance
+        // make function to call detectObjects when elapsed time is greater than 500ms
+
         imageAnalyzer!!.setAnalyzer(cameraExecutor) { image -> detectObjects(image) }
 
         // Must unbind the use-cases before rebinding them
@@ -181,7 +183,13 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
         val imageRotation = image.imageInfo.rotationDegrees
 
         // Pass Bitmap and rotation to the object detector helper for processing and detection
-        personClassifier.detect(bitmapBuffer, imageRotation)
+        // if 500ms has passed since last analysis
+        if (SystemClock.elapsedRealtime() - lastAnalysisResultTime >= 3000) {
+            personClassifier.detect(bitmapBuffer, imageRotation)
+            Log.d(TAG, "detectObjects: called")
+        }
+        lastAnalysisResultTime = SystemClock.elapsedRealtime()
+        Log.d(TAG, "detectObjects: lastAnalysisResultTime: $lastAnalysisResultTime")
     }
 
     // Update UI after objects have been detected. Extracts original image height/width
@@ -205,13 +213,31 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
             
             // change UI according to the result
             if (isPersonDetected) {
-                personView.text = "PERSON"
-                personView.setBackgroundColor(ProjectConfiguration.activeBackgroundColor)
-                personView.setTextColor(ProjectConfiguration.activeTextColor)
-            } else {
-                personView.text = "NO PERSON"
+                // if person is detected, pop up alert dialog
+                Sync = false
+//                val builder = AlertDialog.Builder(requireContext())
+//                builder.setTitle("Person Detected")
+//                builder.setMessage("Do you want to call 911?")
+                personView.text = "Face Detected"
                 personView.setBackgroundColor(ProjectConfiguration.idleBackgroundColor)
                 personView.setTextColor(ProjectConfiguration.idleTextColor)
+            } else {
+                // if person is detected, pop up alert dialog
+//                val builder = AlertDialog.Builder(requireContext())
+//                builder.setTitle("Person Not Detected")
+//                builder.setPositiveButton("No", null)
+//                val msgDlg = builder.create()
+//                msgDlg.show()
+
+                // sleep until the dialog is closed
+
+
+                // pop up toast message
+                //Toast.makeText(requireContext(), "No person detected", Toast.LENGTH_SHORT).show()
+                Sync = true
+                personView.text = "Out of CAM"
+                personView.setBackgroundColor(ProjectConfiguration.activeBackgroundColor)
+                personView.setTextColor(ProjectConfiguration.activeTextColor)
             }
 
             // Force a redraw
@@ -224,4 +250,5 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
         }
     }
+
 }

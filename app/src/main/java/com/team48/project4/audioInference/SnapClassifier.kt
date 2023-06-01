@@ -1,4 +1,4 @@
-package com.example.project4.audioInference
+package com.team48.project4.audioInference
 
 import android.content.Context
 import android.media.AudioRecord
@@ -99,7 +99,7 @@ class SnapClassifier {
         val output = classifier.classify(tensor)
         Log.d(TAG, output.toString())
 
-        return output[0].categories.find { it.label == "Finger snapping" }!!.score
+        return output[0].categories.find { it.label == "Speech" }!!.score
     }
 
     fun startInferencing() {
@@ -147,7 +147,7 @@ class SnapClassifier {
      * @property    THRESHOLD           threshold of the score to classify sound as a horn sound
      */
     companion object {
-        const val TAG = "HornClassifier"
+        const val TAG = "SpeechClassifier"
 
         const val REFRESH_INTERVAL_MS = 33L
         const val YAMNET_MODEL = "yamnet_classification.tflite"

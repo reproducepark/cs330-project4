@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.team48.project4.ProjectConfiguration
-import com.team48.project4.audioInference.SnapClassifier
+import com.team48.project4.audioInference.SpeechClassifier
 import com.team48.project4.databinding.FragmentAudioBinding
 
-class AudioFragment: Fragment(), SnapClassifier.DetectorListener {
+class AudioFragment: Fragment(), SpeechClassifier.DetectorListener {
     private val TAG = "AudioFragment"
 
     private var _fragmentAudioBinding: FragmentAudioBinding? = null
@@ -20,7 +20,7 @@ class AudioFragment: Fragment(), SnapClassifier.DetectorListener {
         get() = _fragmentAudioBinding!!
 
     // classifiers
-    lateinit var snapClassifier: SnapClassifier
+    lateinit var snapClassifier: SpeechClassifier
 
     // views
     lateinit var snapView: TextView
@@ -40,7 +40,7 @@ class AudioFragment: Fragment(), SnapClassifier.DetectorListener {
 
         snapView = fragmentAudioBinding.SnapView
 
-        snapClassifier = SnapClassifier()
+        snapClassifier = SpeechClassifier()
         snapClassifier.initialize(requireContext())
         snapClassifier.setDetectorListener(this)
     }
@@ -57,7 +57,7 @@ class AudioFragment: Fragment(), SnapClassifier.DetectorListener {
 
     override fun onResults(score: Float) {
         activity?.runOnUiThread {
-            if (score > SnapClassifier.THRESHOLD) {
+            if (score > SpeechClassifier.THRESHOLD) {
                 snapView.text = "Sound Detected"
                 snapView.setBackgroundColor(ProjectConfiguration.activeBackgroundColor)
                 snapView.setTextColor(ProjectConfiguration.activeTextColor)

@@ -1,11 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android-extensions'
 }
 
 android {
     namespace 'com.team48.project4'
     compileSdk 33
+
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         applicationId "com.team48.project4"
@@ -38,7 +43,7 @@ android {
 
     // ADDED: view binding
     buildFeatures {
-        viewBinding true
+        viewBinding=true
     }
 }
 
@@ -70,4 +75,6 @@ dependencies {
 
     implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.9.0'
+
+    apply plugin: 'kotlin-android-extensions'
 }

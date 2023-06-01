@@ -4,6 +4,7 @@ import android.Manifest.permission.CAMERA
 import android.Manifest.permission.RECORD_AUDIO
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +15,12 @@ import androidx.core.app.ActivityCompat
 import java.util.*
 import androidx.appcompat.app.AlertDialog
 import com.team48.project4.R
-
+import android.widget.ImageView
+import android.view.View
+//import com.team48.project4.ImgView
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
-
     // permissions
     private val permissions = arrayOf(RECORD_AUDIO, CAMERA)
     private val PERMISSIONS_REQUEST = 0x0000001;
@@ -27,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val imageView: ImageView = findViewById(R.id.imageView)
+        imageView.visibility = View.INVISIBLE
 
         checkPermissions() // check permissions
     }

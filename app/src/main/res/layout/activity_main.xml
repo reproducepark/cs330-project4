@@ -28,5 +28,13 @@
         app:layout_constraintTop_toBottomOf="@+id/cameraFragmentContainerView"
         tools:layout="@layout/fragment_audio" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType = "centerInside"
+        android:background = "@color/red"
+        app:srcCompat="@drawable/psyf" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

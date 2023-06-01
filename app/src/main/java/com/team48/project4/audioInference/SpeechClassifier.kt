@@ -12,7 +12,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 import com.team48.project4.fragment.Sync
 
 
-class SnapClassifier {
+class SpeechClassifier {
     // Libraries for audio classification
     lateinit var classifier: AudioClassifier
     lateinit var recorder: AudioRecord

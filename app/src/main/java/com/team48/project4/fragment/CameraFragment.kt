@@ -32,7 +32,6 @@ import androidx.camera.core.ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.team48.project4.MainActivity
 import com.team48.project4.ProjectConfiguration
 import com.team48.project4.cameraInference.PersonClassifier
 import com.team48.project4.databinding.FragmentCameraBinding
@@ -40,10 +39,27 @@ import org.tensorflow.lite.task.vision.detector.Detection
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import com.team48.project4.fragment.Sync
 
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import com.team48.project4.R
+import kotlinx.android.synthetic.main.activity_main.*
+import android.view.*
+
+//import com.example.databinding.ActivityMainBinding
+import com.team48.project4.databinding.ActivityMainBinding
+import com.team48.project4.MainActivity
+
+//data binding utility
+//import androidx.databinding.DataBindingUtil
 
 class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
+    val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.blink_animation)
+    val imageView: ImageView = findViewById(R.id.imageView)
+//    private lateinit var binding: ActivityMainBinding
+//    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//    binding.viewModel = MyViewModel()
+//    val imageView = binding.myImageView
     private val TAG = "CameraFragment"
 
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
@@ -185,7 +201,7 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
         // Pass Bitmap and rotation to the object detector helper for processing and detection
         // if 500ms has passed since last analysis
 //        Log.d(TAG, "detectObjects: real time: ${SystemClock.elapsedRealtime()}, lastAnalysisResultTime: $lastAnalysisResultTime")
-        if (SystemClock.elapsedRealtime() - lastAnalysisResultTime >= 3000) {
+        if (SystemClock.elapsedRealtime() - lastAnalysisResultTime >= Sync.cameraInferenceRate) {
             Log.d(TAG, "detectObjects: called")
             lastAnalysisResultTime = SystemClock.elapsedRealtime()
             personClassifier.detect(bitmapBuffer, imageRotation)
@@ -214,14 +230,22 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
             
             // change UI according to the result
             if (isPersonDetected) {
+                Sync.cameraInferenceRate = 5000
+                Log.d(TAG, "current cameraInferenceRate: ${Sync.cameraInferenceRate}")
                 Sync.count = 0
                 Sync.bool = false
+                imageView.visibility = View.INVISIBLE
+                imageView.clearAnimation()
                 personView.text = "Face Detected"
                 personView.setBackgroundColor(ProjectConfiguration.idleBackgroundColor)
                 personView.setTextColor(ProjectConfiguration.idleTextColor)
             } else {
+                imageView.visibility = View.VISIBLE
+                imageView.startAnimation(anim)
+                Sync.cameraInferenceRate = 3333
+                Log.d(TAG, "current cameraInferenceRate: ${Sync.cameraInferenceRate}")
                 if(Sync.count++ == 3) {
-                    Log.d(TAG, "onObjectDetectionResults: count: ${Sync.count}")
+                    Log.d(TAG, "currentCount: ${Sync.count}")
                     popFailMessage()
                 }
                 Sync.bool = true

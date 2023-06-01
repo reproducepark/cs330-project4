@@ -42,7 +42,7 @@
         android:layout_gravity="bottom"
         android:background="@color/white"
         android:gravity="center"
-        android:text="NO PERSON"
+        android:text="Face Detected"
         android:textColor="@color/black" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,6 +9,7 @@ import org.tensorflow.lite.support.audio.TensorAudio
 import org.tensorflow.lite.task.audio.classifier.AudioClassifier
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
+import com.team48.project4.fragment.Sync
 
 
 class SnapClassifier {
@@ -105,8 +106,10 @@ class SnapClassifier {
     fun startInferencing() {
         if (task == null) {
             task = Timer().scheduleAtFixedRate(0, REFRESH_INTERVAL_MS) {
-                val score = inference()
-                detectorListener?.onResults(score)
+                if(Sync.bool == true) {
+                    val score = inference()
+                    detectorListener?.onResults(score)
+                }
             }
         }
     }

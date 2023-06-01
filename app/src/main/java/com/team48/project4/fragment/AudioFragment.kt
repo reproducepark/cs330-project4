@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.team48.project4.ProjectConfiguration
 import com.team48.project4.audioInference.SnapClassifier
@@ -57,14 +58,27 @@ class AudioFragment: Fragment(), SnapClassifier.DetectorListener {
     override fun onResults(score: Float) {
         activity?.runOnUiThread {
             if (score > SnapClassifier.THRESHOLD) {
-                snapView.text = "SNAP"
+                snapView.text = "Sound Detected"
                 snapView.setBackgroundColor(ProjectConfiguration.activeBackgroundColor)
                 snapView.setTextColor(ProjectConfiguration.activeTextColor)
+                popFailMessage()
             } else {
-                snapView.text = "NO SNAP"
+                snapView.text = "No Sound Detected"
                 snapView.setBackgroundColor(ProjectConfiguration.idleBackgroundColor)
                 snapView.setTextColor(ProjectConfiguration.idleTextColor)
             }
         }
+    }
+
+    fun popFailMessage() {
+        // pop up a fail message with a button
+        // when the button is clicked, close the app
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("You have failed the test")
+        builder.setMessage("You talked during the test.")
+        builder.setPositiveButton("OK") { _, _ ->
+            activity?.finish()
+        }
+        builder.show()
     }
 }

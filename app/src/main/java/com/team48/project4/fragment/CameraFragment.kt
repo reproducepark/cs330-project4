@@ -40,10 +40,10 @@ import org.tensorflow.lite.task.vision.detector.Detection
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.team48.project4.fragment.Sync
 
 
 class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
-    var Sync: Boolean = false
     private val TAG = "CameraFragment"
 
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
@@ -184,11 +184,12 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
 
         // Pass Bitmap and rotation to the object detector helper for processing and detection
         // if 500ms has passed since last analysis
+//        Log.d(TAG, "detectObjects: real time: ${SystemClock.elapsedRealtime()}, lastAnalysisResultTime: $lastAnalysisResultTime")
         if (SystemClock.elapsedRealtime() - lastAnalysisResultTime >= 3000) {
-            personClassifier.detect(bitmapBuffer, imageRotation)
             Log.d(TAG, "detectObjects: called")
+            lastAnalysisResultTime = SystemClock.elapsedRealtime()
+            personClassifier.detect(bitmapBuffer, imageRotation)
         }
-        lastAnalysisResultTime = SystemClock.elapsedRealtime()
         Log.d(TAG, "detectObjects: lastAnalysisResultTime: $lastAnalysisResultTime")
     }
 
@@ -213,28 +214,17 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
             
             // change UI according to the result
             if (isPersonDetected) {
-                // if person is detected, pop up alert dialog
-                Sync = false
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder.setTitle("Person Detected")
-//                builder.setMessage("Do you want to call 911?")
+                Sync.count = 0
+                Sync.bool = false
                 personView.text = "Face Detected"
                 personView.setBackgroundColor(ProjectConfiguration.idleBackgroundColor)
                 personView.setTextColor(ProjectConfiguration.idleTextColor)
             } else {
-                // if person is detected, pop up alert dialog
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder.setTitle("Person Not Detected")
-//                builder.setPositiveButton("No", null)
-//                val msgDlg = builder.create()
-//                msgDlg.show()
-
-                // sleep until the dialog is closed
-
-
-                // pop up toast message
-                //Toast.makeText(requireContext(), "No person detected", Toast.LENGTH_SHORT).show()
-                Sync = true
+                if(Sync.count++ == 3) {
+                    Log.d(TAG, "onObjectDetectionResults: count: ${Sync.count}")
+                    popFailMessage()
+                }
+                Sync.bool = true
                 personView.text = "Out of CAM"
                 personView.setBackgroundColor(ProjectConfiguration.activeBackgroundColor)
                 personView.setTextColor(ProjectConfiguration.activeTextColor)
@@ -249,6 +239,18 @@ class CameraFragment : Fragment(), PersonClassifier.DetectorListener {
         activity?.runOnUiThread {
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun popFailMessage() {
+        // pop up a fail message with a button
+        // when the button is clicked, close the app
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("You have failed the test")
+        builder.setMessage("You didn't show your face for 10 seconds.")
+        builder.setPositiveButton("OK") { _, _ ->
+            activity?.finish()
+        }
+        builder.show()
     }
 
 }
